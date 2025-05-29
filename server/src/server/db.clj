@@ -6,9 +6,9 @@
 (defn limpar []
   (reset! registros []))
 
-(defn adicionar-alimento [nome quantidade calorias]
+(defn adicionar-alimento [nome calorias]
     (let [id (swap! next-id inc)]
-        (swap! registros assoc id {:id id :nome nome :quantidade quantidade :calorias calorias})
+        (swap! registros assoc id {:id id :nome nome :calorias calorias})
         (println @registros)))
 
 (defn get-registros []

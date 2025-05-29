@@ -39,8 +39,8 @@
   
   (POST "/post-teste" request
     (let [query (:query (:body request))
-          response (fetch-alimento query)]
-      (println (:nf_calories (first response)))))
+          food (first (fetch-alimento query))]
+      (adicionar-alimento query (:nf_calories food))))
 
 
   (GET "/teste" [] 
