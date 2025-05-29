@@ -1,11 +1,12 @@
 (ns client.core
   (:require [clojure.tools.cli :refer [parse-opts]])
-  (:require [clj-http.client :as client])
+  (:require [clj-http.client :as http-client])
   (:gen-class))
 
 (def cli-options
   [["-h", "--help"]])
 
 (defn -main [& args]
-  (let [options (:options (parse-opts args cli-options))] 
-    (println options)))
+  (let [options (:options (parse-opts args cli-options))
+        ] 
+    (println pikachu)))
