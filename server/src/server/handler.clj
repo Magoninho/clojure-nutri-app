@@ -3,7 +3,7 @@
             [compojure.route :as route]
             [clj-http.client :as http-client]
             [cheshire.core :refer :all]
-            [server.db :refer [adicionar-alimento]]
+            [server.db :refer [adicionar-registro get-registros]]
             [ring.adapter.jetty :refer [run-jetty]]
             [ring.middleware.json :refer [wrap-json-body]]
             [ring.util.response :refer [response status]]
@@ -26,31 +26,36 @@
         response (http-client/post url {:headers headers :body body :as :json})]
     (get-in response [:body :foods])))
 
-;; (defn fetch-alimento [name]
-;;   (let [url (str "https://trackapi.nutritionix.com/v2/search/instant?detailed=true&query=" name)
-;;         alimento (http-client/get url {:headers 
-;;                                           {"x-app-id" app-id
-;;                                            "x-app-key" api-key
-;;                                            "Content-Type" "application/json"}})]
-;;     alimento))
+(defn fetch-exercicio [name age weight height]
+  (let [url "https://trackapi.nutritionix.com/v2/natural/exercise"
+        headers {"x-app-id" app-id
+                 "x-app-key" api-key
+                 "Content-Type" "application/json"}
+        body (generate-string {:query name
+                               :age age
+                               :weight_kg weight
+                               :height_cm height})
+        response (http-client/post url {:headers headers :body body :as :json})]
+    (get-in response [:body :exercises])))
+
 
 (defroutes app-routes
-  (GET "/" [] (adicionar-alimento "teste" 1 12))
+  (GET "/registros" [] (generate-string (get-registros)))
   
-  (POST "/post-teste" request
+  (POST "/registros/alimento/add" request
     (let [query (:query (:body request))
-          food (first (fetch-alimento query))]
-      (adicionar-alimento query (:nf_calories food))))
+          food (first (fetch-alimento query))
+          result (adicionar-registro query (:nf_calories food))]
+      (como-json {:success true :registro result})))
 
-
-  (GET "/teste" [] 
-    (let [url "https://trackapi.nutritionix.com/v2/search/instant?detailed=true&query=egg"
-          alimento (http-client/get url {:headers 
-                                          {"x-app-id" app-id
-                                           "x-app-key" api-key
-                                           "Content-Type" "application/json"}})]
-      alimento))
-  (route/not-found "Not Found"))
+  (POST "/registros/exercicio/add" request
+    (let [query (:query (:body request))
+          age (:age (:body request))
+          weight (:weight_kg (:body request))
+          height (:height_cm (:body request))
+          exercicio (first (fetch-exercicio query age weight height))
+          result (adicionar-registro query (- (int (:nf_calories exercicio))))]
+      (como-json {:success true :registro result}))))
 
 (def app
   (-> (wrap-defaults app-routes api-defaults)
