@@ -9,12 +9,19 @@
         response (http-client/get url {:headers headers :as :json})]
     (get-in response [:body :registros])))
 
-(defn add-alimento [query date hour]
-  (let [url "http://localhost:3000/registros/alimento/add"
+(defn add-registro 
+  ([type query date hour]
+  (let [url (str "http://localhost:3000/registros/" type "/add")
         headers {"Content-Type" "application/json"}
         body (generate-string {:query query :date date :hour hour})
         response (http-client/post url {:headers headers :body body :as :json})]
         response))
+  ([type query date hour age weight height]
+  (let [url (str "http://localhost:3000/registros/" type "/add")
+        headers {"Content-Type" "application/json"}
+        body (generate-string {:query query :date date :hour hour :age age :weight weight :height height})
+        response (http-client/post url {:headers headers :body body :as :json})]
+        response)))
 
 (defn print-registros [registros]
   (mapv (fn [i] 
@@ -25,21 +32,25 @@
 
 (defn perda [])
 
-(defn menu []
+(def age 20)
+(def weight 76)
+(def height 175)
+
+
+(defn menu [age weight height]
   (let [registros (get-all-registros)]
     (println "Tabela:")
     (flush)
     (print-registros registros)
-
   ; TODO: cadastrar dados pessoais (altura, peso, idade)
   (println)
-  (println "Selecione uma opção:\n1. Registrar ganho de peso\n2. Registrar perda de peso\n3. Sair\n")
   (println "1. Registrar consumo de alimento")
   (println "2. Registrar exercicio fisico")
   (println "3. Consultar extrato de transações")
   (println "4. Consultar saldo de calorias")
   (println "5. Sair")
   
+
   (def opcao (read-line))
   (cond
     (= opcao "1") 
@@ -51,14 +62,24 @@
               date (read-line)
               _ (println "Digite o horario que voce consumiu (HH:MM) ou deixe vazio para horario atual:")
               hour (read-line)
-              response (add-alimento alimento date hour)]
+              response (add-registro "alimento" alimento date hour)]
           (if (:success (:body response)) (println "sucesso") (println "erro"))))
-    (= opcao "2") (perda)
+    (= opcao "2")
+      (do 
+        (println "Digite o exercicio em linguagem natural (ex: 1 hora de natação):")
+        (flush)
+        (let [exercicio (read-line)
+              _ (println "Digite a data que voce se exercitou (DD/MM/AAAA) ou deixe vazio para data atual:")
+              date (read-line)
+              _ (println "Digite o horario que voce se exercitou (HH:MM) ou deixe vazio para horario atual:")
+              hour (read-line)
+              response (add-registro "exercicio" exercicio date hour age weight height)]
+          (if (:success (:body response)) (println "sucesso") (println "erro"))))
     (= opcao "3") (System/exit 0))
   (println "")
 
-  (recur)))
+  (recur age weight height)))
 
 (defn -main [& args]
   (println "+-----------+\n| Nutri App |\n+-----------+\n")
-  (menu))
+  (menu age weight height))

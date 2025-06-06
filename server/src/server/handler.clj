@@ -52,11 +52,13 @@
 
   (POST "/registros/exercicio/add" request
     (let [query (:query (:body request))
+          date (:date (:body request))
+          hour (:hour (:body request))
           age (:age (:body request))
           weight (:weight_kg (:body request))
           height (:height_cm (:body request))
           exercicio (first (fetch-exercicio query age weight height))
-          result (adicionar-registro query (- (int (:nf_calories exercicio))))]
+          result (adicionar-registro query date hour (- (int (:nf_calories exercicio))))]
       (como-json {:success true :registro result}))))
 
 (def app
