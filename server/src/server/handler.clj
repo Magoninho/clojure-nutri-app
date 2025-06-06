@@ -40,7 +40,11 @@
 
 
 (defroutes app-routes
-  (GET "/registros" [] (generate-string (get-registros)))
+   (GET "/registros" [begin end]
+    (let [registros (if (and begin end)
+                (get-registros begin end)
+                (get-registros))]
+      (generate-string registros)))
   
   (POST "/registros/alimento/add" request
     (let [query (:query (:body request))

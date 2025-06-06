@@ -23,6 +23,13 @@
         response (http-client/post url {:headers headers :body body :as :json})]
         response)))
 
+(defn get-registros-range [begin end]
+  (let [url "http://localhost:3000/registros"
+        headers {"Content-Type" "application/json"}
+        params {:begin begin :end end}
+        response (http-client/get url {:headers headers :query-params params :as :json})]
+    (:body response)))
+
 (defn print-registros [registros]
   (mapv (fn [i] 
     (println "Nome:" (:nome i) "| Data:" (:date i) "| Hora:" (:hour i) "| Calorias" (:calorias i))) registros))
@@ -46,8 +53,8 @@
   (println)
   (println "1. Registrar consumo de alimento")
   (println "2. Registrar exercicio fisico")
-  (println "3. Consultar extrato de transações")
-  (println "4. Consultar saldo de calorias")
+  (println "3. Consultar extrato de transações por período")
+  (println "4. Consultar saldo de calorias por período")
   (println "5. Sair")
   
 
@@ -75,8 +82,17 @@
               hour (read-line)
               response (add-registro "exercicio" exercicio date hour age weight height)]
           (if (:success (:body response)) (println "sucesso") (println "erro"))))
-    (= opcao "3") (System/exit 0))
-  (println "")
+    
+    (= opcao "3")
+      (do 
+        (let [_ (println "Digite a data de inicio (DD/MM/AAAA)")
+              begin (read-line)
+              _ (println "Digite a data final (DD/MM/AAAA)")
+              end (read-line)
+              response (get-registros-range begin end)]
+          (mapv (fn [i] (println (:nome i) "|" (:date i) "|" (:hour i) "|" (:calorias i))) response))))
+
+  (println)
 
   (recur age weight height)))
 
