@@ -1,5 +1,6 @@
 (ns client.core
   (:require [clj-http.client :as http-client]
+            [clojure.term.colors :refer :all]
             [cheshire.core :refer :all]))
 
 (defn get-all-registros []
@@ -7,7 +8,7 @@
         headers {"Content-Type" "application/json"}
         ;; body (generate-string {:query texto})
         response (http-client/get url {:headers headers :as :json})]
-    (get-in response [:body :registros])))
+    (:body response)))
 
 (defn add-registro 
   ([type query date hour]
@@ -33,7 +34,7 @@
 
 (defn print-registros [registros]
   (mapv (fn [i] 
-    (println "Nome:" (:nome i) "| Data:" (:date i) "| Hora:" (:hour i) "| Calorias" (:calorias i))) registros))
+    (println (:nome i) "| Data:" (:date i) "| Hora:" (:hour i) "| Calorias" (:calorias i))) registros))
 
 (defn ganho []
   )
@@ -48,10 +49,11 @@
 (defn menu [age weight height]
   (let [registros (get-all-registros)]
     (println "Tabela:")
-    (flush)
     (print-registros registros)
+    (println)
+    (println "Saldo calorico total:" (reduce + (map (fn [item] (:calorias item)) registros)))
   ; TODO: cadastrar dados pessoais (altura, peso, idade)
-  (println)
+  (println "----------------------------------------------")
   (println "1. Registrar consumo de alimento")
   (println "2. Registrar exercicio fisico")
   (println "3. Consultar extrato de transações por período")
@@ -91,7 +93,12 @@
               _ (println "Digite a data final (DD/MM/AAAA)")
               end (read-line)
               response (get-registros-range begin end)]
-          (mapv (fn [i] (println (:nome i) "|" (:date i) "|" (:hour i) "|" (:calorias i))) response)))
+          (println (cyan "----------------------------------------------------------------------"))
+          (println (blue "Seu extrato de transacoes no periodo entre " begin " e " end " foi"))
+          (mapv (fn [i] (println (:nome i) "|" (:date i) "|" (:hour i) "|" (:calorias i))) response))
+          (println (cyan "----------------------------------------------------------------------"))
+          (println "Aperte Enter para continuar...")
+          (read-line))
 
     (= opcao "4")
       (do 
@@ -101,8 +108,12 @@
               end (read-line)
               response (get-registros-range begin end)
               calories (map (fn [item] (:calorias item)) response)]
-          (println "Seu saldo calórico no periodo de" begin "e" end "foi")
-          (println (reduce + calories))))
+          (println (magenta "----------------------------------------------------------------------"))
+          (println (red "Seu saldo calórico no periodo de " begin " e " end " foi "))
+          (println (reduce + calories)))
+          (println (magenta "----------------------------------------------------------------------"))
+          (println "Aperte Enter para continuar...")
+          (read-line))
     (= opcao "5") (System/exit 0))
 
   (println)

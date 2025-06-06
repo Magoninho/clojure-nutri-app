@@ -6,6 +6,7 @@
   :dependencies [[org.clojure/clojure "1.11.1"]
                  [org.clojure/tools.cli "1.1.230"]
                  [clj-http "3.13.0"]
+                 [clojure-term-colors "0.1.0"]
                  [cheshire "6.0.0"]]
   :main ^:skip-aot client.core
   :target-path "target/%s"
