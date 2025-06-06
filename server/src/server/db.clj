@@ -34,3 +34,11 @@
                    (<= (compare-dates date end) 0)
                    (>= (compare-dates date begin) 0)))
             all)))))
+
+;; (defn get-saldo-calorico-range [begin end]
+;;   (let [all (get @registros :registros [])]
+;;     (:keys [calorias] (filter (fn [{:keys [date]}]
+;;               (and (not (clojure.string/blank? date))
+;;                    (<= (compare-dates date end) 0)
+;;                    (>= (compare-dates date begin) 0))
+;;             all)))))

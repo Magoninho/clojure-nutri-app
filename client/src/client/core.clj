@@ -30,6 +30,7 @@
         response (http-client/get url {:headers headers :query-params params :as :json})]
     (:body response)))
 
+
 (defn print-registros [registros]
   (mapv (fn [i] 
     (println "Nome:" (:nome i) "| Data:" (:date i) "| Hora:" (:hour i) "| Calorias" (:calorias i))) registros))
@@ -90,7 +91,19 @@
               _ (println "Digite a data final (DD/MM/AAAA)")
               end (read-line)
               response (get-registros-range begin end)]
-          (mapv (fn [i] (println (:nome i) "|" (:date i) "|" (:hour i) "|" (:calorias i))) response))))
+          (mapv (fn [i] (println (:nome i) "|" (:date i) "|" (:hour i) "|" (:calorias i))) response)))
+
+    (= opcao "4")
+      (do 
+        (let [_ (println "Digite a data de inicio (DD/MM/AAAA)")
+              begin (read-line)
+              _ (println "Digite a data final (DD/MM/AAAA)")
+              end (read-line)
+              response (get-registros-range begin end)
+              calories (map (fn [item] (:calorias item)) response)]
+          (println "Seu saldo calórico no periodo de" begin "e" end "foi")
+          (println (reduce + calories))))
+    (= opcao "5") (System/exit 0))
 
   (println)
 
