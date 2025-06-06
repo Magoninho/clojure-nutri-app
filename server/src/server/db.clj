@@ -12,9 +12,9 @@
 (defn limpar []
   (reset! registros []))
 
-(defn adicionar-registro [nome calorias]
+(defn adicionar-registro [nome date hour calorias]
     (let [id (swap! next-id inc)]
-        (swap! registros assoc id {:id id :created_at (now) :nome nome :calorias calorias})))
+        (swap! registros update :registros (fnil conj []) {:id id :date (if (clojure.string/blank? date) (now) date) :hour (if (clojure.string/blank? hour) (hour-now) hour) :nome nome :calorias calorias})))
 
 (defn get-registros []
     @registros)

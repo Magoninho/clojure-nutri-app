@@ -44,8 +44,10 @@
   
   (POST "/registros/alimento/add" request
     (let [query (:query (:body request))
+          date (:date (:body request))
+          hour (:hour (:body request))
           food (first (fetch-alimento query))
-          result (adicionar-registro query (:nf_calories food))]
+          result (adicionar-registro query date hour (:nf_calories food))]
       (como-json {:success true :registro result})))
 
   (POST "/registros/exercicio/add" request
