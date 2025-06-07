@@ -39,12 +39,6 @@
             (println (:nome i) "| Data:" (:date i) "| Hora:" (:hour i) "| Calorias" (green (:calorias i))))) registros))
     
 
-(defn ganho []
-  )
-
-(defn perda [])
-
-
 (defn menu [age weight height]
   (let [registros (get-all-registros)]
     (println "Todos os registros:")
@@ -52,7 +46,7 @@
     (println)
     (println (on-yellow "Saldo calorico total: " (reduce + (map (fn [item] (:calorias item)) registros))))
   ; TODO: cadastrar dados pessoais (altura, peso, idade)
-  (println "----------------------------------------------")
+  (println "----------------------------------------------------------------------")
   (println "1. Registrar consumo de alimento")
   (println "2. Registrar exercicio fisico")
   (println "3. Consultar extrato de transações por período")
@@ -127,7 +121,8 @@
         _ (print "Digite seu peso em kg: ")
         _ (flush)
         weight (Integer/parseInt (read-line))
-        _ (println "Digite sua altura em cm: ")
+        _ (print "Digite sua altura em cm: ")
         _ (flush)
         height (Integer/parseInt (read-line))]
+    (println)
   (menu age weight height)))
