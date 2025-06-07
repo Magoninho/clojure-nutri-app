@@ -17,12 +17,22 @@
    :headers {"Content-Type" "application/json; charset=utf-8"}
    :body (generate-string conteudo)})
 
+
+  (defn translate [string]
+    (let [api-key "AIzaSyBQKyZxcccaV1yTgr7xpXUI55yDt1SikwU"
+          url (str "https://translation.googleapis.com/language/translate/v2?key=" api-key)
+          body (generate-string {:q string :source "pt-br" :target "en" :format "text"})
+          headers {"Content-Type" "application/json"}
+          response (http-client/post url {:headers headers :body body :as :json})
+          translated (get-in response [:body :data :translations 0 :translatedText])]
+      translated))
+
 (defn fetch-alimento [name]
   (let [url "https://trackapi.nutritionix.com/v2/natural/nutrients"
         headers {"x-app-id" app-id
                  "x-app-key" api-key
                  "Content-Type" "application/json"}
-        body (generate-string {:query name})
+        body (generate-string {:query (translate name)})
         response (http-client/post url {:headers headers :body body :as :json})]
     (get-in response [:body :foods])))
 
@@ -31,7 +41,7 @@
         headers {"x-app-id" app-id
                  "x-app-key" api-key
                  "Content-Type" "application/json"}
-        body (generate-string {:query name
+        body (generate-string {:query (translate name)
                                :age age
                                :weight_kg weight
                                :height_cm height})
