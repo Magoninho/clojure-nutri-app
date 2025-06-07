@@ -34,7 +34,10 @@
 
 (defn print-registros [registros]
   (mapv (fn [i] 
-    (println (:nome i) "| Data:" (:date i) "| Hora:" (:hour i) "| Calorias" (:calorias i))) registros))
+          (if (< (:calorias i) 0)
+            (println (:nome i) "| Data:" (:date i) "| Hora:" (:hour i) "| Calorias" (red (:calorias i)))
+            (println (:nome i) "| Data:" (:date i) "| Hora:" (:hour i) "| Calorias" (green (:calorias i))))) registros))
+    
 
 (defn ganho []
   )
