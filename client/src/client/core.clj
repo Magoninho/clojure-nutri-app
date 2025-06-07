@@ -44,10 +44,6 @@
 
 (defn perda [])
 
-(def age 20)
-(def weight 76)
-(def height 175)
-
 
 (defn menu [age weight height]
   (let [registros (get-all-registros)]
@@ -125,4 +121,13 @@
 
 (defn -main [& args]
   (println (on-green "+-----------+\n| Nutri App |\n+-----------+\n"))
-  (menu age weight height))
+  (let [_ (print "Digite sua idade: ")
+        _ (flush)
+        age (Integer/parseInt (read-line))
+        _ (print "Digite seu peso em kg: ")
+        _ (flush)
+        weight (Integer/parseInt (read-line))
+        _ (println "Digite sua altura em cm: ")
+        _ (flush)
+        height (Integer/parseInt (read-line))]
+  (menu age weight height)))
