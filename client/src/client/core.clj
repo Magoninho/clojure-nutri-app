@@ -48,10 +48,10 @@
 
 (defn menu [age weight height]
   (let [registros (get-all-registros)]
-    (println "Tabela:")
+    (println "Todos os registros:")
     (print-registros registros)
     (println)
-    (println "Saldo calorico total:" (reduce + (map (fn [item] (:calorias item)) registros)))
+    (println (on-yellow "Saldo calorico total: " (reduce + (map (fn [item] (:calorias item)) registros))))
   ; TODO: cadastrar dados pessoais (altura, peso, idade)
   (println "----------------------------------------------")
   (println "1. Registrar consumo de alimento")
@@ -121,5 +121,5 @@
   (recur age weight height)))
 
 (defn -main [& args]
-  (println "+-----------+\n| Nutri App |\n+-----------+\n")
+  (println (on-green "+-----------+\n| Nutri App |\n+-----------+\n"))
   (menu age weight height))
