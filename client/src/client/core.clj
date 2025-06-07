@@ -20,7 +20,7 @@
   ([type query date hour age weight height]
   (let [url (str "http://localhost:3000/registros/" type "/add")
         headers {"Content-Type" "application/json"}
-        body (generate-string {:query query :date date :hour hour :age age :weight weight :height height})
+        body (generate-string {:query query :date date :hour hour :age age :weight_kg weight :height_cm height})
         response (http-client/post url {:headers headers :body body :as :json})]
         response)))
 
