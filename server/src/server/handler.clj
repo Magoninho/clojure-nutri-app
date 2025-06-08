@@ -19,7 +19,7 @@
 
 
   (defn translate [string]
-    (let [api-key "AIzaSyBQKyZxcccaV1yTgr7xpXUI55yDt1SikwU"
+    (let [api-key "CHAVE_API_TRADUTOR"
           url (str "https://translation.googleapis.com/language/translate/v2?key=" api-key)
           body (generate-string {:q string :source "pt-br" :target "en" :format "text"})
           headers {"Content-Type" "application/json"}
