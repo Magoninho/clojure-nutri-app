@@ -3,7 +3,7 @@
             [compojure.route :as route]
             [clj-http.client :as http-client]
             [cheshire.core :refer :all]
-            [server.db :refer [adicionar-registro get-registros]]
+            [server.db :refer [adicionar-registro get-registros atualizar-user get-user]]
             [ring.adapter.jetty :refer [run-jetty]]
             [ring.middleware.json :refer [wrap-json-body]]
             [ring.util.response :refer [response status]]
@@ -50,12 +50,23 @@
 
 
 (defroutes app-routes
-   (GET "/registros" [begin end]
+  (GET "/user" []
+    (let [user (get-user)]
+      (como-json {:success true :user user})))
+
+  (GET "/registros" [begin end]
     (let [registros (if (and begin end)
                 (get-registros begin end)
                 (get-registros))]
       (generate-string registros)))
   
+  (POST "/user/register" request
+    (let [age (:age (:body request))
+          weight (:weight (:body request))
+          height (:height (:body request))
+          result (atualizar-user age weight height)]
+        (como-json {:success true :registro result})))
+
   (POST "/registros/alimento/add" request
     (let [query (:query (:body request))
           date (:date (:body request))

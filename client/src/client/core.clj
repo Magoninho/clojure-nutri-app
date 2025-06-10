@@ -31,6 +31,17 @@
         response (http-client/get url {:headers headers :query-params params :as :json})]
     (:body response)))
 
+(defn get-user-data []
+  (let [response (http-client/get "http://localhost:3000/user" {:as :json})
+    user (:user (:body response))]
+    user))
+
+(defn register-user [age weight height]
+  (let [url "http://localhost:3000/user/register"
+        headers {"Content-Type" "application/json"}
+        body (generate-string {:age age :weight weight :height height})
+        response (http-client/post url {:headers headers :body body :as :json})]
+    (:body response)))
 
 (defn print-registros [registros]
   (mapv (fn [i] 
@@ -132,14 +143,27 @@
 
 (defn -main [& args]
   (println (on-green "+-----------+\n| Nutri App |\n+-----------+\n"))
-  (let [_ (print "Digite sua idade: ")
-        _ (flush)
-        age (Integer/parseInt (read-line))
-        _ (print "Digite seu peso em kg: ")
-        _ (flush)
-        weight (Integer/parseInt (read-line))
-        _ (print "Digite sua altura em cm: ")
-        _ (flush)
-        height (Integer/parseInt (read-line))]
-    (println)
-  (menu age weight height)))
+  
+  (let [user-data (get-user-data)]
+    (if (empty? (get-user-data))
+      (let [_ (print "Digite sua idade: ")
+          _ (flush)
+          age (Integer/parseInt (read-line))
+          _ (print "Digite seu peso em kg: ")
+          _ (flush)
+          weight (Integer/parseInt (read-line))
+          _ (print "Digite sua altura em cm: ")
+          _ (flush)
+          height (Integer/parseInt (read-line))]
+        (println)
+        (register-user age weight height)
+        (menu age weight height))
+    
+      (let [age (:age user-data)
+            weight (:weight user-data)
+            height (:height user-data)]
+
+          (println (blue "Informações do usuário cadastrado:"))
+          (println "Idade:" age "Peso:" weight "Altura:" height)
+          (println)
+          (menu age weight height)))))

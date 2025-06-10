@@ -1,5 +1,6 @@
 (ns server.db)
 
+(defonce user (atom {}))
 (defonce registros (atom {}))
 (defonce next-id (atom 0))
 ;; (defn now [] (new java.util.Date))
@@ -11,6 +12,12 @@
 
 (defn limpar []
   (reset! registros []))
+
+(defn get-user []
+  @user)
+
+(defn atualizar-user [age weight height]
+  (reset! user {:age age :weight weight :height height}))
 
 (defn adicionar-registro [nome date hour calorias]
     (let [id (swap! next-id inc)]
