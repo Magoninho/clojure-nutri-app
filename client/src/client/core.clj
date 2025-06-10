@@ -38,6 +38,23 @@
             (println (:nome i) "| Data:" (:date i) "| Hora:" (:hour i) "| Calorias" (red (:calorias i)))
             (println (:nome i) "| Data:" (:date i) "| Hora:" (:hour i) "| Calorias" (green (:calorias i))))) registros))
     
+(defn despedida []
+  (println 
+"⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⢏⣵⣿⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⢿
+⣿⣿⣿⣿⣿⣿⣿⣿⢏⣷⣿⣿⣟⣽⣽⣿⣿⡿⠿⣿⣿⣿⡿⠿⠋⡠⣤⣶
+⣿⣿⣿⣿⣿⣿⣿⠁⠘⢟⠽⠛⠓⠍⠉⡈⠁⠤⣦⣌⣿⠛⠀⢀⣼⣽⣿⣿
+⠿⠿⠿⠿⠿⠿⢿⣤⡀⠈⣠⢴⠖⣄⠨⣿⣄⠢⡄⢳⣿⠲⢚⣵⣿⣿⣿⣿
+⣷⣮⡢⢄⣀⠀⠀⠀⠁⢠⣧⡴⢶⣡⣭⣭⣴⣷⡍⠀⠀⢤⣾⣿⣿⣿⣿⣿
+⣿⣿⣿⣷⣮⣝⣲⣦⠀⠀⠻⢿⠟⠱⢿⣛⡛⠝⠀⠀⢠⣿⣿⣿⣿⣿⣿⣿
+⣿⣿⣿⣿⣿⣿⣿⣿⣦⣦⠀⠀⠀⠀⠀⠀⠤⠀⠀⠀⢺⣿⣿⣿⣿⣿⣿⣿  - Que a Força esteja com você!
+⣿⣿⣿⣿⣿⣿⣿⡿⠿⠋⠀⠀⠀⠀⠀⠀⠀⠀⡀⠔⡛⡦⡙⣏⠻⢿⣿⣿
+⣿⣿⣿⣿⣿⡟⠃⠀⠀⠀⠌⡄⠀⠀⠀⠀⠈⣁⣀⣴⣩⣻⣿⣦⣱⡈⢿⣿
+⣿⣿⣿⣿⡟⠀⠀⠀⠀⠀⠐⢾⡀⠀⠀⠉⠉⠉⣉⣡⡶⠸⢿⣿⠿⠃⠈⣿
+⣿⣿⣿⣿⠁⠀⠀⠀⠀⠀⠀⠀⠘⢁⡶⢤⣀⣝⡳⡿⠁⠀⠀⠀⠀⠀⠀⣿
+⣿⣿⣿⡏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢙⢙⡑⣿⡏⢦⢤⣀⠀⠀⠀⣽
+⣿⣿⣿⣇⠀⣄⠀⠀⠀⠀⠀⠀⠀⠀⣐⡚⣁⣤⣝⠋⢀⢄⠡⡙⢿⣶⣶⣿
+⣿⣿⣿⣿⣿⣾⣷⣶⣶⣶⣶⣶⣾⣿⣿⣿⣶⣶⣶⣿⣿⣷⣷⣷⣶⣾⣿⣿"))
 
 (defn menu [age weight height]
   (let [registros (get-all-registros)]
@@ -107,7 +124,7 @@
           (println (magenta "----------------------------------------------------------------------"))
           (println "Aperte Enter para continuar...")
           (read-line))
-    (= opcao "5") (System/exit 0))
+    (= opcao "5") (do (despedida) (System/exit 0)))
 
   (println)
 
